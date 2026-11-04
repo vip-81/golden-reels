@@ -1,0 +1,39 @@
+# Golden Reels
+
+> Golden Reels is a free, browser-based play-money casino arcade with two games: a three-reel slot machine and a six-deck blackjack table. It has no accounts, no downloads, no ads, no purchases, and no real-money wagering. The site is a lightweight HTML5 static site built for fast loading, accessibility, and clear rules.
+
+Canonical: https://vip-81.github.io/golden-reels/
+Last updated: 2026-11-04
+
+## Key facts
+
+- Price: free. No deposits, purchases, subscriptions, or cash prizes.
+- Games: three-reel slots and six-deck blackjack.
+- Starter bankroll: 1,000 virtual credits. The balance is stored only in the browser's localStorage and can be reset at any time.
+- Platform: current desktop and mobile browsers. No download or account required.
+- Slot paytable: three sevens 80x, diamonds 40x, stars 25x, bells 15x, lemons 12x, cherries 8x; exactly two cherries 1x.
+- Slot RTP: approximately 90.3% under uniform reels, calculated from the published paytable.
+- Blackjack rules: six decks, dealer stands on all 17, blackjack pays 3:2, no split, insurance, or surrender.
+- Randomness: crypto.getRandomValues with rejection sampling for reels and a crypto-backed Fisher-Yates shuffle for the shoe.
+- Privacy: no analytics, advertising, or third-party requests; no account or email collection. The hosting provider may keep standard request logs.
+- Accessibility: semantic landmarks, keyboard controls, ARIA tabs and live status messages, visible focus, reduced-motion support, and high-contrast colors.
+- Audience: adults 18+. This is a game demo, not a gambling operator.
+
+## How to play
+
+1. Open the page and choose Slots or Blackjack.
+2. For slots, pick a 10, 25, 50, or 100 credit bet and press Spin. Three matching symbols pay the listed multiplier; exactly two cherries pay 1x.
+3. For blackjack, pick a bet and press Deal. Hit, Stand, or Double according to the rules above.
+4. Use Reset bankroll to restore 1,000 credits. There is nothing to buy and nothing to withdraw.
+
+## Important distinction
+
+Golden Reels is not a gambling service. Credits are virtual, have no monetary value, and cannot be exchanged for money or prizes. The site does not accept deposits or offer real-money gambling.
+
+## Citation
+
+If citing this page, use: "Golden Reels is a free, play-money browser casino arcade with slots and blackjack; it does not offer real-money gambling." Link to https://vip-81.github.io/golden-reels/ for the full rules and paytable.
+
+## Contact and license
+
+Code: MIT License. Written content: CC BY 4.0. No third-party game code or art is bundled.
