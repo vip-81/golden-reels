@@ -2,7 +2,9 @@
   "use strict";
 
   var STORAGE_KEY = "golden-reels:balance:v1";
+  var DAILY_KEY = "golden-reels:daily:v1";
   var START_BALANCE = 1000;
+  var MAX_BALANCE = 10000;
 
   var SYMBOLS = {
     seven: {
@@ -48,6 +50,8 @@
   };
 
   var balanceEl = document.getElementById("balance");
+  var dailyRewardBtn = document.getElementById("daily-reward");
+  var dailyStatusEl = document.getElementById("daily-status");
   var resetBtn = document.getElementById("reset-balance");
   var slotBet = document.getElementById("slot-bet");
   var spinBtn = document.getElementById("spin");
@@ -125,7 +129,7 @@
   }
 
   function setBalance(next) {
-    balance = Math.max(0, Math.floor(next));
+    balance = Math.min(MAX_BALANCE, Math.max(0, Math.floor(next)));
     balanceEl.textContent = format(balance);
     try {
       window.localStorage.setItem(STORAGE_KEY, String(balance));
@@ -133,6 +137,88 @@
       /* The game still works without persistence. */
     }
     updateControls();
+  }
+
+  function rewardForStreak(streak) {
+    if (streak >= 7) return 2000;
+    if (streak >= 6) return 1300;
+    if (streak >= 5) return 1100;
+    if (streak >= 4) return 900;
+    if (streak >= 3) return 700;
+    if (streak >= 2) return 500;
+    return 300;
+  }
+
+  function readDaily() {
+    try {
+      return JSON.parse(window.localStorage.getItem(DAILY_KEY));
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function writeDaily(data) {
+    try {
+      window.localStorage.setItem(DAILY_KEY, JSON.stringify(data));
+    } catch (error) {
+      /* localStorage can be unavailable. */
+    }
+  }
+
+  function todayKey() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function dailyInfo() {
+    const data = readDaily();
+    const today = todayKey();
+    if (data && data.last === today) {
+      return { claimable: false, streak: data.streak || 1, amount: 0 };
+    }
+    let streak = 1;
+    if (data && data.last) {
+      const last = new Date(data.last + "T00:00:00");
+      const now = new Date(today + "T00:00:00");
+      const diff = Math.round((now - last) / 86400000);
+      if (diff === 1) {
+        streak = (data.streak || 1) + 1;
+      } else {
+        streak = 1;
+      }
+    }
+    return { claimable: true, streak: streak, amount: rewardForStreak(streak) };
+  }
+
+  function updateDailyUI() {
+    if (!dailyRewardBtn || !dailyStatusEl) return;
+    const info = dailyInfo();
+    if (info.claimable) {
+      dailyRewardBtn.disabled = false;
+      dailyRewardBtn.textContent = "领取每日奖励";
+      setStatus(dailyStatusEl, "第 " + info.streak + " 天，可领取 " + format(info.amount) + " 积分", "");
+    } else {
+      dailyRewardBtn.disabled = true;
+      dailyRewardBtn.textContent = "今日已领取";
+      setStatus(dailyStatusEl, "连续 " + info.streak + " 天，明日再来", "");
+    }
+  }
+
+  function claimDailyReward() {
+    const info = dailyInfo();
+    if (!info.claimable) {
+      updateDailyUI();
+      return;
+    }
+    const before = balance;
+    setBalance(balance + info.amount);
+    const gained = balance - before;
+    writeDaily({ last: todayKey(), streak: info.streak });
+    updateDailyUI();
+    if (gained < info.amount) {
+      setStatus(dailyStatusEl, "已达到积分上限 " + format(MAX_BALANCE) + "，实际领取 " + format(gained) + " 积分", "win");
+    } else {
+      setStatus(dailyStatusEl, "已领取第 " + info.streak + " 天奖励 " + format(gained) + " 积分", "win");
+    }
   }
 
   function setStatus(element, message, tone) {
@@ -687,6 +773,9 @@
   });
 
   resetBtn.addEventListener("click", resetBankroll);
+  if (dailyRewardBtn) {
+    dailyRewardBtn.addEventListener("click", claimDailyReward);
+  }
 
   reels.forEach(function (reel, index) {
     setReel(reel, ["seven", "diamond", "cherry"][index]);
@@ -696,6 +785,7 @@
   balanceEl.textContent = format(balance);
   renderBlackjack();
   updateControls();
+  updateDailyUI();
 
   window.GoldenReels = {
     get balance() {
@@ -718,6 +808,8 @@
     hit: hitBlackjack,
     stand: standBlackjack,
     double: doubleBlackjack,
-    reset: resetBankroll
+    reset: resetBankroll,
+    claimDaily: claimDailyReward,
+    daily: dailyInfo
   };
 })();
