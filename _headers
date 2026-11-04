@@ -1,0 +1,19 @@
+# Security and cache policy for Netlify / Cloudflare Pages style static hosts.
+
+/assets/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'none'; frame-ancestors 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self'; font-src 'self'; connect-src 'none'; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=31536000
