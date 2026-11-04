@@ -1,0 +1,33 @@
+{
+  "name": "Golden Reels — Play-Money Casino Arcade",
+  "short_name": "Golden Reels",
+  "description": "Free browser slots and blackjack with virtual credits. No signup, no downloads, no real money.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#06110d",
+  "theme_color": "#071b15",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "assets/img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
