@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /404.html
+
+# AI assistants and search crawlers are welcome.
+# A concise, citation-friendly summary is available at /llms.txt.
+
+Sitemap: https://vip-81.github.io/golden-reels/sitemap.xml
